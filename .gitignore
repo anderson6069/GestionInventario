@@ -1,0 +1,39 @@
+# Archivos de Python compilados
+*.pyc
+*.pyo
+__pycache__/
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+env.bak/
+
+# Archivos de configuración de IDEs
+.vscode/
+.idea/
+
+# Archivos de log
+*.log
+
+# Archivos temporales de sistemas operativos
+*.swp
+*.swo
+.DS_Store
+
+# Archivos temporales de Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Archivos de configuración de PyCharm
+.idea/
+
+# Archivos de configuración de Visual Studio Code
+.vscode/
+
+# Ignorar el archivo .env si usas variables de entorno
+.env
+
+# Ignorar cualquier archivo de caché del sistema
+Thumbs.db
+ehthumbs.db
