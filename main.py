@@ -1,44 +1,94 @@
+import tkinter as tk
+from tkinter import messagebox
+from app.producto import Producto
 from app.categoria import Categoria
 from app.proveedor import Proveedor
-from app.producto import Producto
 from app.bodega import Bodega
-# Crear productos
-producto1 = Producto("Laptop", "Laptop de alta gama", 1000, 10, "Electrónica")
-producto2 = Producto("Teclado", "Teclado mecánico", 150, 20, "Accesorios")
 
-# Crear categorías
-categoria1 = Categoria("Electrónica", "Productos electrónicos")
-categoria2 = Categoria("Accesorios", "Accesorios para computadoras")
+categoria = Categoria("Electrónica", "Dispositivos electrónicos y gadgets")
+proveedor = Proveedor("Tech Supplier", "Calle 123", "123456789")
+bodega = Bodega("Central", "Ciudad", 100)
 
-# Agregar productos a las categorías
-categoria1.agregar_producto(producto1)
-categoria2.agregar_producto(producto2)
 
-# Crear proveedor
-proveedor = Proveedor("Proveedor A", "Calle Falsa 123", "555-1234")
-proveedor.agregar_producto(producto1)
-proveedor.agregar_producto(producto2)
+def agregar_producto():
+    nombre = entry_nombre.get()
+    descripcion = entry_descripcion.get()
+    try:
+        precio = float(entry_precio.get())
+        stock = int(entry_stock.get())
+    except ValueError:
+        messagebox.showerror(
+            "Error", "Por favor ingresa valores numéricos válidos para precio y stock.")
+        return
 
-# Crear bodega
-bodega = Bodega("Bodega Central", "Ubicación A1", 100)
+    if nombre and descripcion:
+        # Crear el producto
+        producto = Producto(nombre, descripcion, precio, stock)
+        # Agregar a la categoría, proveedor y bodega
+        categoria.agregar_producto(producto)
+        proveedor.agregar_producto(producto)
+        bodega.agregar_producto(producto, stock)
 
-# Agregar productos a la bodega
-bodega.agregar_producto(producto1, 10)
-bodega.agregar_producto(producto2, 20)
+        messagebox.showinfo("Éxito", f"Producto {
+                            nombre} agregado correctamente.")
+        # Limpiar los campos
+        entry_nombre.delete(0, tk.END)
+        entry_descripcion.delete(0, tk.END)
+        entry_precio.delete(0, tk.END)
+        entry_stock.delete(0, tk.END)
+    else:
+        messagebox.showwarning(
+            "Advertencia", "Por favor ingresa todos los datos.")
 
-# Mostrar productos almacenados en la bodega
-print("Productos en la bodega:")
-print(bodega.listar_productos())
 
-# Vender productos
-print("\nVendiendo productos...")
-bodega.vender_producto("Laptop", 5)  # Vende 5 laptops
-bodega.vender_producto("Teclado", 5)  # Vende 5 teclados
+def mostrar_info():
+    # Mostrar información sobre la categoría, proveedor y bodega
+    info = f"Categoría: {categoria.nombre}\nProductos: {
+        len(categoria.productos)}\n\n"
+    info += f"Proveedor: {proveedor.nombre}\nProductos: {
+        len(proveedor.productos)}\n\n"
+    info += f"Bodega: {bodega.nombre}\nProductos: {len(bodega.productos)}"
+    messagebox.showinfo("Información", info)
 
-# Mostrar productos después de la venta
-print("\nProductos en la bodega después de la venta:")
-print(bodega.listar_productos())
 
-# Intentar vender un producto con un stock insuficiente
-print("\nIntentando vender un producto con stock insuficiente:")
-bodega.vender_producto("Laptop", 10)  # No hay suficiente stock
+# Crear la ventana principal
+ventana = tk.Tk()
+ventana.title("Gestión de Inventario")
+
+# Campos de entrada
+label_nombre = tk.Label(ventana, text="Nombre del Producto")
+label_nombre.pack()
+
+entry_nombre = tk.Entry(ventana)
+entry_nombre.pack()
+
+label_descripcion = tk.Label(ventana, text="Descripción")
+label_descripcion.pack()
+
+entry_descripcion = tk.Entry(ventana)
+entry_descripcion.pack()
+
+label_precio = tk.Label(ventana, text="Precio")
+label_precio.pack()
+
+entry_precio = tk.Entry(ventana)
+entry_precio.pack()
+
+label_stock = tk.Label(ventana, text="Stock")
+label_stock.pack()
+
+entry_stock = tk.Entry(ventana)
+entry_stock.pack()
+
+# Botón para agregar producto
+boton_agregar = tk.Button(
+    ventana, text="Agregar Producto", command=agregar_producto)
+boton_agregar.pack()
+
+# Botón para mostrar información de productos
+boton_info = tk.Button(
+    ventana, text="Mostrar Información", command=mostrar_info)
+boton_info.pack()
+
+# Ejecutar la interfaz
+ventana.mainloop()
